@@ -34,6 +34,13 @@ body {
   100% { background-position: 100% 100%, 8px 8px; }
 }
 
+@keyframes droplet-slide {
+  0% { transform: translateY(0); opacity: 0; }
+  5% { opacity: 0.6; }
+  60% { opacity: 0.6; }
+  100% { transform: translateY(110vh); opacity: 0; }
+}
+
 /* Scrollbar */
 .scrollbar-none::-webkit-scrollbar {
   display: none;

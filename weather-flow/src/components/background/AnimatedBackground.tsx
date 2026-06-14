@@ -1,9 +1,10 @@
 import { useMemo, useState, useEffect } from 'react'
 import type { WeatherCondition } from '../../types/weather'
 import SunbeamEffect from './effects/SunbeamEffect'
-import CloudShadowEffect from './effects/CloudShadowEffect'
+import CloudEffect from './effects/CloudEffect'
 import FogEffect from './effects/FogEffect'
 import WetGlassEffect from './effects/WetGlassEffect'
+import RaindropsEffect from './effects/RaindropsEffect'
 import FrostEffect from './effects/FrostEffect'
 import LightningEffect from './effects/LightningEffect'
 import ParticleCanvas from './particles/ParticleCanvas'
@@ -96,16 +97,29 @@ export default function AnimatedBackground({ condition, isDay, windSpeed = 0 }: 
       {condition === 'clear' && <SunbeamEffect intensity="full" />}
       {condition === 'mostly_clear' && <SunbeamEffect intensity="subtle" />}
 
-      {condition === 'partly_cloudy' && <CloudShadowEffect density="light" />}
-      {condition === 'cloudy' && <CloudShadowEffect density="heavy" />}
+      {condition === 'partly_cloudy' && <CloudEffect density="light" />}
+      {condition === 'cloudy' && <CloudEffect density="heavy" />}
 
       {condition === 'foggy' && <FogEffect />}
 
       {(condition === 'drizzle' || condition === 'rain' || condition === 'freezing_drizzle' || condition === 'freezing_rain') && (
-        <WetGlassEffect intensity={condition === 'drizzle' || condition === 'freezing_drizzle' ? 'light' : 'medium'} />
+        <>
+          <WetGlassEffect intensity={condition === 'drizzle' || condition === 'freezing_drizzle' ? 'light' : 'medium'} />
+          <RaindropsEffect intensity={condition === 'drizzle' || condition === 'freezing_drizzle' ? 'light' : 'medium'} />
+        </>
       )}
-      {condition === 'heavy_rain' && <WetGlassEffect intensity="heavy" />}
-      {(condition === 'thunderstorm' || condition === 'hail_thunderstorm') && <WetGlassEffect intensity="heavy" />}
+      {condition === 'heavy_rain' && (
+        <>
+          <WetGlassEffect intensity="heavy" />
+          <RaindropsEffect intensity="heavy" />
+        </>
+      )}
+      {(condition === 'thunderstorm' || condition === 'hail_thunderstorm') && (
+        <>
+          <WetGlassEffect intensity="heavy" />
+          <RaindropsEffect intensity="heavy" />
+        </>
+      )}
 
       {(condition === 'freezing_drizzle' || condition === 'freezing_rain') && <FrostEffect />}
 
