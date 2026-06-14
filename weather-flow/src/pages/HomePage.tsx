@@ -38,16 +38,16 @@ export default function HomePage() {
   if (showGpsPrompt) {
     return (
       <div className="flex flex-col items-center justify-center min-h-dvh px-4 text-center">
-        <MapPin size={48} className="text-gray-400 mb-4" />
-        <p className="text-lg font-medium text-gray-600 dark:text-gray-400 mb-2">
+        <MapPin size={48} className="text-white/50 mb-4" />
+        <p className="text-lg font-medium text-white/80 mb-2">
           Activá el GPS para ver el clima
         </p>
-        <p className="text-sm text-gray-400 mb-6">
+        <p className="text-sm text-white/50 mb-6">
           O buscá una ciudad manualmente
         </p>
         <Link
           to="/search"
-          className="px-6 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors"
+          className="px-5 py-2.5 rounded-xl bg-white/20 backdrop-blur-md border border-white/20 text-white hover:bg-white/30 transition-all text-sm font-medium"
         >
           Buscar ciudad
         </Link>
@@ -73,8 +73,16 @@ export default function HomePage() {
         onToggleFavorite={() => fav ? removeFavorite(lat, lon) : addFavorite({ name: weather.locationName, country: '', latitude: lat, longitude: lon, countryCode: '' })}
         onRefresh={() => refetch()}
       />
-      <CurrentWeather data={weather.current} />
-      <MetricsRow data={weather.current} uvIndex={uvIndex} />
+      <CurrentWeather
+        data={weather.current}
+        locationName={weather.locationName}
+      />
+      <MetricsRow
+        data={weather.current}
+        uvIndex={uvIndex}
+        precipitation={weather.current.precipitation}
+        precipProbability={weather.hourly[0]?.precipitationProbability}
+      />
       <HourlyForecast data={weather.hourly} />
       <DailyForecast data={weather.daily} />
       {weather.airQuality && <AirQualityCard data={weather.airQuality} />}

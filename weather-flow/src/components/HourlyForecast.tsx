@@ -12,18 +12,24 @@ export default function HourlyForecast({ data }: Props) {
 
   return (
     <div className="px-4 py-3">
-      <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">Próximas horas</h2>
-      <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-none">
-        {data.slice(0, 24).map((h) => (
-          <div key={h.time} className="flex flex-col items-center gap-1 min-w-[56px]">
-            <span className="text-xs text-gray-500 dark:text-gray-400">{formatHour(h.time)}</span>
-            <span className="text-lg">{getWmoInfo(h.weatherCode).icon}</span>
-            <span className="text-sm font-medium">{formatTemp(h.temperature, tempUnit)}</span>
-            {h.precipitationProbability > 0 && (
-              <span className="text-xs text-blue-500">{h.precipitationProbability}%</span>
-            )}
-          </div>
-        ))}
+      <h2 className="text-sm font-semibold text-white/70 uppercase tracking-wide mb-3">Próximas horas</h2>
+      <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none snap-x snap-mandatory">
+        {data.slice(0, 24).map((h) => {
+          const precip = h.precipitationProbability
+          return (
+            <div
+              key={h.time}
+              className="flex flex-col items-center gap-1.5 min-w-[64px] p-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 snap-start"
+            >
+              <span className="text-xs text-white/60">{formatHour(h.time)}</span>
+              <span className="text-2xl">{getWmoInfo(h.weatherCode).icon}</span>
+              <span className="text-sm font-semibold text-white">{formatTemp(h.temperature, tempUnit)}</span>
+              {precip > 0 && (
+                <span className="text-[10px] text-blue-300 font-medium">{precip}%</span>
+              )}
+            </div>
+          )
+        })}
       </div>
     </div>
   )
