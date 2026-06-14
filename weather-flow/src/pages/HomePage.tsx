@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useGeolocation } from '../hooks/useGeolocation'
 import { useActiveCity } from '../hooks/useActiveCity'
 import { useWeather } from '../hooks/useWeather'
+import { useLocationName } from '../hooks/useLocationName'
 import { useFavorites } from '../hooks/useFavorites'
 import LocationHeader from '../components/LocationHeader'
 import CurrentWeather from '../components/CurrentWeather'
@@ -30,6 +31,8 @@ export default function HomePage() {
   }, [position, activeCity, clearActiveCity])
 
   const { data: weather, isLoading, isError, refetch } = useWeather(coords?.latitude ?? null, coords?.longitude ?? null)
+  const { data: geo } = useLocationName(coords?.latitude ?? null, coords?.longitude ?? null)
+  const locationName = activeCity?.name ?? geo?.name ?? weather?.locationName ?? 'Cargando...'
 
   const showGpsPrompt = geoError && !position && !activeCity
 
@@ -38,16 +41,16 @@ export default function HomePage() {
   if (showGpsPrompt) {
     return (
       <div className="flex flex-col items-center justify-center min-h-dvh px-4 text-center">
-        <MapPin size={48} className="text-white/50 mb-4" />
-        <p className="text-lg font-medium text-white/80 mb-2">
+        <MapPin size={48} className="text-gray-400 dark:text-white/50 mb-4" />
+        <p className="text-lg font-medium text-gray-800 dark:text-white/80 mb-2">
           Activá el GPS para ver el clima
         </p>
-        <p className="text-sm text-white/50 mb-6">
+        <p className="text-sm text-gray-500 dark:text-white/50 mb-6">
           O buscá una ciudad manualmente
         </p>
         <Link
           to="/search"
-          className="px-5 py-2.5 rounded-xl bg-white/20 backdrop-blur-md border border-white/20 text-white hover:bg-white/30 transition-all text-sm font-medium"
+          className="px-5 py-2.5 rounded-xl bg-white/80 dark:bg-white/20 backdrop-blur-md border border-gray-300/60 dark:border-white/20 text-gray-900 dark:text-white hover:bg-white/90 dark:hover:bg-white/30 transition-all text-sm font-medium"
         >
           Buscar ciudad
         </Link>
@@ -64,24 +67,29 @@ export default function HomePage() {
   const fav = isFavorite(lat, lon)
   const uvIndex = weather.hourly[0]?.uvIndex
 
+  const today = new Date().toISOString().slice(0, 10)
+  const remainingToday = weather.hourly.filter(h => h.time.startsWith(today))
+  const maxPrecipProb = remainingToday.length > 0
+    ? Math.max(...remainingToday.map(h => h.precipitationProbability ?? 0))
+    : 0
+
   return (
     <div className="pb-8 relative">
       <AnimatedBackground condition={weather.current.condition} isDay={weather.current.isDay} />
       <LocationHeader
-        name={weather.locationName}
+        name={locationName}
         isFavorite={fav}
-        onToggleFavorite={() => fav ? removeFavorite(lat, lon) : addFavorite({ name: weather.locationName, country: '', latitude: lat, longitude: lon, countryCode: '' })}
+        onToggleFavorite={() => fav ? removeFavorite(lat, lon) : addFavorite({ name: locationName, country: '', latitude: lat, longitude: lon, countryCode: '' })}
         onRefresh={() => refetch()}
       />
       <CurrentWeather
         data={weather.current}
-        locationName={weather.locationName}
+        locationName={locationName}
       />
       <MetricsRow
         data={weather.current}
         uvIndex={uvIndex}
-        precipitation={weather.current.precipitation}
-        precipProbability={weather.hourly[0]?.precipitationProbability}
+        precipProbability={maxPrecipProb}
       />
       <HourlyForecast data={weather.hourly} />
       <DailyForecast data={weather.daily} />

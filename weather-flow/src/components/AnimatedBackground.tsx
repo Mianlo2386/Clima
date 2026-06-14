@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import type { WeatherCondition } from '../types/weather'
 
 interface Props {
@@ -72,19 +72,22 @@ const gradients: Record<WeatherCondition, { day: [string, string, string]; night
 function RainDrops() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {Array.from({ length: 20 }).map((_, i) => (
-        <div
-          key={i}
-          className="absolute w-[2px] bg-white/20 animate-rain"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `-${Math.random() * 20}%`,
-            height: `${10 + Math.random() * 20}px`,
-            animationDelay: `${Math.random() * 2}s`,
-            animationDuration: `${0.5 + Math.random() * 0.8}s`,
-          }}
-        />
-      ))}
+      {Array.from({ length: 20 }).map((_, i) => {
+        const duration = 0.5 + Math.random() * 0.8
+        const delay = Math.random() * 2
+        return (
+          <div
+            key={i}
+            className="absolute w-[2px] bg-white/20"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `-${Math.random() * 20}%`,
+              height: `${10 + Math.random() * 20}px`,
+              animation: `rain-fall ${duration}s linear ${delay}s infinite`,
+            }}
+          />
+        )
+      })}
     </div>
   )
 }
@@ -92,49 +95,81 @@ function RainDrops() {
 function SnowFlakes() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {Array.from({ length: 30 }).map((_, i) => (
-        <div
-          key={i}
-          className="absolute w-[4px] h-[4px] bg-white/60 rounded-full animate-snow"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `-${Math.random() * 10}%`,
-            animationDelay: `${Math.random() * 5}s`,
-            animationDuration: `${3 + Math.random() * 4}s`,
-            opacity: 0.4 + Math.random() * 0.6,
-          }}
-        />
-      ))}
+      {Array.from({ length: 30 }).map((_, i) => {
+        const duration = 3 + Math.random() * 4
+        const delay = Math.random() * 5
+        return (
+          <div
+            key={i}
+            className="absolute w-[4px] h-[4px] bg-white/60 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `-${Math.random() * 10}%`,
+              opacity: 0.4 + Math.random() * 0.6,
+              animation: `snow-fall ${duration}s linear ${delay}s infinite`,
+            }}
+          />
+        )
+      })}
     </div>
   )
 }
+
+const POSITIONS = [
+  { x: 0, y: 50 },
+  { x: 100, y: 0 },
+  { x: 50, y: 100 },
+  { x: 100, y: 50 },
+]
 
 export default function AnimatedBackground({ condition, isDay }: Props) {
   const palette = condition ? gradients[condition] : gradients.clear
   const colors = isDay ? palette.day : palette.night
 
-  const { gradient1, gradient2 } = useMemo(() => {
+  const { mainGradient, depthGradient } = useMemo(() => {
     const [c1, c2, c3] = colors
     return {
-      gradient1: `linear-gradient(135deg, ${c1} 0%, ${c2} 50%, ${c3} 100%)`,
-      gradient2: `linear-gradient(225deg, ${c3} 0%, ${c2} 50%, ${c1} 100%)`,
+      mainGradient: `linear-gradient(135deg, ${c1} 0%, ${c2} 30%, ${c3} 50%, ${c2} 70%, ${c1} 100%)`,
+      depthGradient: `linear-gradient(225deg, ${c3} 0%, ${c2} 30%, ${c1} 50%, ${c2} 70%, ${c3} 100%)`,
     }
   }, [colors])
+
+  const [phase, setPhase] = useState(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPhase(p => (p + 1) % POSITIONS.length)
+    }, 7000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const pos = POSITIONS[phase]
 
   const isRainy = condition === 'rain' || condition === 'heavy_rain' || condition === 'drizzle' || condition === 'freezing_drizzle' || condition === 'freezing_rain'
   const isSnowy = condition === 'snow' || condition === 'heavy_snow' || condition === 'snow_grains'
 
   return (
-    <div className="fixed inset-0 -z-10">
+    <div className="fixed inset-0 -z-10 overflow-hidden">
       <div
-        className="absolute inset-0 animate-gradient"
-        style={{ background: gradient1 }}
+        className="absolute inset-0"
+        style={{
+          backgroundImage: mainGradient,
+          backgroundSize: '400% 400%',
+          backgroundPosition: `${pos.x}% ${pos.y}%`,
+          transition: 'background-position 7s ease-in-out',
+        }}
       />
       <div
-        className="absolute inset-0 animate-gradient-delayed opacity-50"
-        style={{ background: gradient2 }}
+        className="absolute inset-0 opacity-20"
+        style={{
+          backgroundImage: depthGradient,
+          backgroundSize: '400% 400%',
+          backgroundPosition: `${100 - pos.x}% ${100 - pos.y}%`,
+          transition: 'background-position 7s ease-in-out',
+        }}
       />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(255,255,255,0.08)_0%,_transparent_60%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_30%,_rgba(0,0,0,0.15)_100%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(255,255,255,0.08)_0%,_transparent_60%)] pointer-events-none" />
       {isRainy && <RainDrops />}
       {isSnowy && <SnowFlakes />}
     </div>

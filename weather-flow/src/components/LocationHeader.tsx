@@ -14,24 +14,24 @@ export default function LocationHeader({ name, isFavorite, onToggleFavorite, sho
     <div className="flex items-center justify-between px-4 py-4">
       <div className="flex items-center gap-2">
         {showBack && (
-          <Link to="/" className="text-white/70 hover:text-white transition-colors">
+          <Link to="/" className="text-gray-600 dark:text-white/70 hover:text-gray-900 dark:hover:text-white transition-colors">
             <ArrowLeft size={20} />
           </Link>
         )}
-        <h1 className="text-base font-medium text-white/80 truncate">{name}</h1>
+        <h1 className="text-base font-medium text-gray-800 dark:text-white/80 truncate">{name}</h1>
       </div>
       <div className="flex items-center gap-2.5">
-        <button onClick={onToggleFavorite} className="text-white/60 hover:text-yellow-400 transition-colors">
+        <button onClick={onToggleFavorite} className="text-gray-500 dark:text-white/60 hover:text-yellow-400 transition-colors">
           <Star size={18} fill={isFavorite ? 'currentColor' : 'none'} className={isFavorite ? 'text-yellow-400' : ''} />
         </button>
-        <Link to="/search" className="text-white/60 hover:text-white transition-colors">
+        <Link to="/search" className="text-gray-500 dark:text-white/60 hover:text-gray-900 dark:hover:text-white transition-colors">
           <Search size={18} />
         </Link>
-        <Link to="/settings" className="text-white/60 hover:text-white transition-colors">
+        <Link to="/settings" className="text-gray-500 dark:text-white/60 hover:text-gray-900 dark:hover:text-white transition-colors">
           <Settings size={18} />
         </Link>
         {onRefresh && (
-          <button onClick={onRefresh} className="text-white/60 hover:text-blue-400 transition-colors">
+          <button onClick={onRefresh} className="text-gray-500 dark:text-white/60 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
             <RefreshCw size={18} />
           </button>
         )}

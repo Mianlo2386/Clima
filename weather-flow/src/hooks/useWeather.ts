@@ -2,7 +2,6 @@ import { useQuery } from '@tanstack/react-query'
 import { fetchWeather } from '../api/weather.api'
 import { fetchAirQuality } from '../api/airQuality.api'
 import { fetchAlerts } from '../api/alerts.api'
-import { reverseGeocode } from '../api/geocoding.api'
 import { getWmoInfo } from '../utils/wmoConditions'
 import type { CurrentWeather, HourlyForecast, DailyForecast, AirQuality, WeatherAlert, WeatherData } from '../types/weather'
 
@@ -22,11 +21,10 @@ export function useWeather(lat: number | null, lon: number | null) {
     enabled: lat !== null && lon !== null,
     staleTime: 1000 * 60 * 15,
     queryFn: async () => {
-      const [forecast, airQuality, alerts, geo] = await Promise.all([
+      const [forecast, airQuality, alerts] = await Promise.all([
         fetchWeather(lat!, lon!),
         fetchAirQuality(lat!, lon!).catch(() => null),
         fetchAlerts(lat!, lon!).catch(() => null),
-        reverseGeocode(lat!, lon!).catch(() => null),
       ])
 
       const current: CurrentWeather = {
@@ -89,7 +87,7 @@ export function useWeather(lat: number | null, lon: number | null) {
         daily,
         airQuality: aq,
         alerts: weatherAlerts,
-        locationName: geo?.name ?? `${lat?.toFixed(2)}, ${lon?.toFixed(2)}`,
+        locationName: `${lat?.toFixed(2)}, ${lon?.toFixed(2)}`,
       }
     },
   })

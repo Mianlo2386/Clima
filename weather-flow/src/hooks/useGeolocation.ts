@@ -15,7 +15,8 @@ export function useGeolocation() {
 
     async function getPosition() {
       try {
-        const { Geolocation } = await import('@capacitor/geolocation').catch(() => null)
+        const CapacitorGeo = await import('@capacitor/geolocation').catch(() => null)
+        const Geolocation = CapacitorGeo?.Geolocation ?? null
 
         if (Geolocation) {
           const perm = await Geolocation.requestPermissions()

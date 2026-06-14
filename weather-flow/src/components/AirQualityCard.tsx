@@ -25,10 +25,10 @@ const levelColors: Record<AirQuality['level'], string> = {
 export default function AirQualityCard({ data }: Props) {
   return (
     <div className="px-4 py-3">
-      <h2 className="text-sm font-semibold text-white/70 uppercase tracking-wide mb-3">Calidad del Aire</h2>
-      <div className="rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 p-4">
+      <h2 className="text-sm font-semibold text-gray-700 dark:text-white/70 uppercase tracking-wide mb-3">Calidad del Aire</h2>
+      <div className="rounded-2xl bg-white/70 dark:bg-white/10 backdrop-blur-md border border-gray-200/60 dark:border-white/10 p-4">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-3xl font-light text-white">{data.europeanAqi ?? '—'}</span>
+          <span className="text-3xl font-light text-gray-900 dark:text-white">{data.europeanAqi ?? '—'}</span>
           <span className={`text-sm font-medium ${levelColors[data.level]}`}>
             {levelLabels[data.level]}
           </span>
@@ -36,20 +36,20 @@ export default function AirQualityCard({ data }: Props) {
         <div className="grid grid-cols-3 gap-3 text-xs">
           {data.pm25 !== null && (
             <div>
-              <span className="text-white/50">PM2.5</span>
-              <p className="font-medium text-white/80">{data.pm25.toFixed(1)} µg</p>
+              <span className="text-gray-500 dark:text-white/50">PM2.5</span>
+              <p className="font-medium text-gray-800 dark:text-white/80">{data.pm25.toFixed(1)} µg</p>
             </div>
           )}
           {data.pm10 !== null && (
             <div>
-              <span className="text-white/50">PM10</span>
-              <p className="font-medium text-white/80">{data.pm10.toFixed(1)} µg</p>
+              <span className="text-gray-500 dark:text-white/50">PM10</span>
+              <p className="font-medium text-gray-800 dark:text-white/80">{data.pm10.toFixed(1)} µg</p>
             </div>
           )}
           {data.ozone !== null && (
             <div>
-              <span className="text-white/50">Ozono</span>
-              <p className="font-medium text-white/80">{data.ozone.toFixed(1)} µg</p>
+              <span className="text-gray-500 dark:text-white/50">Ozono</span>
+              <p className="font-medium text-gray-800 dark:text-white/80">{data.ozone.toFixed(1)} µg</p>
             </div>
           )}
         </div>

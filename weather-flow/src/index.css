@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+body {
+  background-color: #f9fafb;
+}
+.dark body {
+  background-color: #111827;
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
@@ -15,22 +22,6 @@
   --color-stormy-night: #1A237E;
 }
 
-@keyframes gradient-move {
-  0% { transform: translate(0%, 0%) scale(1); }
-  25% { transform: translate(5%, -5%) scale(1.05); }
-  50% { transform: translate(-5%, 2%) scale(1.02); }
-  75% { transform: translate(3%, -3%) scale(1.04); }
-  100% { transform: translate(0%, 0%) scale(1); }
-}
-
-@keyframes gradient-move-delayed {
-  0% { transform: translate(0%, 0%) scale(1.1); }
-  25% { transform: translate(-5%, 5%) scale(1.05); }
-  50% { transform: translate(5%, -2%) scale(1.08); }
-  75% { transform: translate(-3%, 3%) scale(1.03); }
-  100% { transform: translate(0%, 0%) scale(1.1); }
-}
-
 @keyframes rain-fall {
   0% { transform: translateY(-10vh); opacity: 0; }
   10% { opacity: 1; }
@@ -41,22 +32,6 @@
   0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
   10% { opacity: 1; }
   100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-}
-
-.animate-gradient {
-  animation: gradient-move 20s ease-in-out infinite;
-}
-
-.animate-gradient-delayed {
-  animation: gradient-move-delayed 25s ease-in-out infinite;
-}
-
-.animate-rain {
-  animation: rain-fall 1s linear infinite;
-}
-
-.animate-snow {
-  animation: snow-fall 6s linear infinite;
 }
 
 /* Scrollbar */

@@ -7,10 +7,10 @@ interface Props {
 }
 
 const severityColors: Record<string, string> = {
-  extreme: 'bg-red-500/20 border-red-400/40 text-red-300',
-  severe: 'bg-orange-500/20 border-orange-400/40 text-orange-300',
-  moderate: 'bg-yellow-500/20 border-yellow-400/40 text-yellow-300',
-  minor: 'bg-blue-500/20 border-blue-400/40 text-blue-300',
+  extreme: 'bg-red-50 dark:bg-red-500/20 border-red-300 dark:border-red-400/40 text-red-700 dark:text-red-300',
+  severe: 'bg-orange-50 dark:bg-orange-500/20 border-orange-300 dark:border-orange-400/40 text-orange-700 dark:text-orange-300',
+  moderate: 'bg-yellow-50 dark:bg-yellow-500/20 border-yellow-300 dark:border-yellow-400/40 text-yellow-700 dark:text-yellow-300',
+  minor: 'bg-blue-50 dark:bg-blue-500/20 border-blue-300 dark:border-blue-400/40 text-blue-700 dark:text-blue-300',
 }
 
 export default function AlertBanner({ alerts }: Props) {
@@ -37,7 +37,7 @@ export default function AlertBanner({ alerts }: Props) {
         {expanded && (
           <div className="mt-3 space-y-3">
             {alerts.map((a, i) => (
-              <div key={i} className="text-sm text-white/80">
+              <div key={i} className="text-sm text-gray-800 dark:text-white/80">
                 <p className="font-semibold">{a.event}</p>
                 <p className="mt-1 opacity-80">{a.description}</p>
               </div>

@@ -5,15 +5,14 @@ import type { CurrentWeather } from '../types/weather'
 interface Props {
   data: CurrentWeather
   uvIndex?: number
-  precipitation?: number
   precipProbability?: number
 }
 
-export default function MetricsRow({ data, uvIndex, precipitation, precipProbability }: Props) {
-  const precipLabel = precipitation != null && precipitation > 0
-    ? `${precipitation.toFixed(1)} mm`
-    : precipProbability != null && precipProbability > 0
-      ? `${precipProbability}%`
+export default function MetricsRow({ data, uvIndex, precipProbability }: Props) {
+  const precipLabel = precipProbability != null
+    ? `${precipProbability}%`
+    : data.precipitation != null
+      ? `${data.precipitation.toFixed(1)} mm`
       : '—'
 
   return (
@@ -29,10 +28,10 @@ export default function MetricsRow({ data, uvIndex, precipitation, precipProbabi
 
 function Metric({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <div className="flex flex-col items-center gap-1 p-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/10">
-      <span className="text-white/60">{icon}</span>
-      <span className="text-[10px] text-white/50 uppercase tracking-wide">{label}</span>
-      <span className="text-sm font-semibold text-white">{value}</span>
+    <div className="flex flex-col items-center gap-1 p-2 rounded-xl bg-white/70 dark:bg-white/10 backdrop-blur-md border border-gray-200/60 dark:border-white/10">
+      <span className="text-gray-500 dark:text-white/60">{icon}</span>
+      <span className="text-[10px] text-gray-400 dark:text-white/50 uppercase tracking-wide">{label}</span>
+      <span className="text-sm font-semibold text-gray-900 dark:text-white">{value}</span>
     </div>
   )
 }

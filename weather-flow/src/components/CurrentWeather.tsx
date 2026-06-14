@@ -1,6 +1,6 @@
 import { getWeatherIcon, getWmoInfo } from '../utils/wmoConditions'
 import { formatTemp } from '../utils/formatters'
-import type { CurrentWeather as CurrentWeatherType, WeatherCondition } from '../types/weather'
+import type { CurrentWeather as CurrentWeatherType } from '../types/weather'
 import { useSettings } from '../hooks/useSettings'
 
 interface Props {
@@ -16,12 +16,12 @@ export default function CurrentWeather({ data, locationName, conditionLabel }: P
 
   return (
     <div className="flex flex-col items-center py-8 px-4">
-      <span className="text-sm font-medium text-white/80 tracking-wide uppercase">{locationName}</span>
+      <span className="text-sm font-medium text-gray-700 dark:text-white/80 tracking-wide uppercase">{locationName}</span>
       <div className="text-7xl my-2 drop-shadow-lg">{icon}</div>
-      <div className="text-7xl font-thin tracking-tight text-white">
+      <div className="text-7xl font-thin tracking-tight text-gray-900 dark:text-white">
         {formatTemp(data.temperature, tempUnit)}
       </div>
-      <div className="text-base text-white/70 mt-2">
+      <div className="text-base text-gray-600 dark:text-white/70 mt-2">
         {label} — Sensación {formatTemp(data.feelsLike, tempUnit)}
       </div>
     </div>
