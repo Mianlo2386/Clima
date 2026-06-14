@@ -13,7 +13,7 @@ import AirQualityCard from '../components/AirQualityCard'
 import AlertBanner from '../components/AlertBanner'
 import LoadingSkeleton from '../components/LoadingSkeleton'
 import ErrorView from '../components/ErrorView'
-import AnimatedBackground from '../components/AnimatedBackground'
+import AnimatedBackground from '../components/background/AnimatedBackground'
 import { Link } from 'react-router-dom'
 import { MapPin } from 'lucide-react'
 
@@ -75,7 +75,7 @@ export default function HomePage() {
 
   return (
     <div className="pb-8 relative">
-      <AnimatedBackground condition={weather.current.condition} isDay={weather.current.isDay} />
+      <AnimatedBackground condition={weather.current.condition} isDay={weather.current.isDay} windSpeed={weather.current.windSpeed} />
       <LocationHeader
         name={locationName}
         isFavorite={fav}
